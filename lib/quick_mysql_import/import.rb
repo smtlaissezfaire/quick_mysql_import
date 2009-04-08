@@ -3,8 +3,9 @@ module QuickMysqlImport
     include MysqlConnection
     include Tableizer
 
-    def initialize(dir)
-      @dir = dir
+    def initialize(dir, use_threading = false)
+      @dir           = dir
+      @use_threading = use_threading
     end
 
     def import
@@ -23,12 +24,22 @@ module QuickMysqlImport
 
     def import_data
       data_files.each do |file|
-        import_file(file)
+        import = lambda { import_file(file) }
+
+        if use_threading
+          fork(&import)
+        else
+          import.call
+        end
       end
     end
 
     def import_file(file)
       mysql "LOAD DATA IN FILE #{file} INTO TABLE #{tablize(file)}"
+    end
+
+    def use_threading?
+      @use_threading ? true : false
     end
 
   private
