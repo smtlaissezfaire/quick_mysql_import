@@ -25,12 +25,8 @@ module QuickMysqlImport
     def import_data
       data_files.each do |file|
         import = lambda { import_file(file) }
-
-        if use_threading
-          fork(&import)
-        else
-          import.call
-        end
+        
+        use_threading? ? fork(&import) : import.call
       end
     end
 
