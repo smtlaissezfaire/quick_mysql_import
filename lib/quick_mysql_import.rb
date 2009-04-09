@@ -1,11 +1,9 @@
 
 require "using"
 
-class Module
-  include Using
-end
-
 module QuickMysqlImport
+  extend Using
+  
   using :FileFinder
   using :MysqlConnection
   using :Tableizer
