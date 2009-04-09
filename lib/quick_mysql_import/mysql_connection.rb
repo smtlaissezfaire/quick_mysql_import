@@ -1,3 +1,5 @@
+require "rake"
+
 module QuickMysqlImport
   module MysqlConnection
     def mysql(string)
@@ -5,11 +7,11 @@ module QuickMysqlImport
     end
 
     def mysqldump(string)
-      "/usr/bin/env mysqldump #{string}"
+      sh "/usr/bin/env mysqldump #{string}"
     end
 
     def mysql_user
-      mysql_config[:username]
+      mysql_config[:user]
     end
 
     def mysql_password
@@ -22,6 +24,13 @@ module QuickMysqlImport
 
     def mysql_database
       mysql_config[:database]
+    end
+    
+    def tables
+      result = mysql "SHOW TABLES"
+      result.extend Enumerable
+      tables = result.to_a
+      tables.flatten
     end
     
   private

@@ -8,7 +8,7 @@ module QuickMysqlImport
     end
     
     it "should have the mysql_user" do
-      user = ActiveRecord::Base.connection.instance_variable_get("@config")[:username]
+      user = ActiveRecord::Base.connection.instance_variable_get("@config")[:user]
       @obj.mysql_user.should == user
     end
     
