@@ -1,7 +1,7 @@
 module QuickMysqlImport
   module MysqlConnection
     def mysql(string)
-      ActiveRecord::Base.connection.execute(string)
+      mysql_connection.execute(string)
     end
 
     def mysqldump(string)
@@ -9,19 +9,37 @@ module QuickMysqlImport
     end
 
     def mysql_user
-      raise NotImplementedError
+      mysql_config[:username]
     end
 
     def mysql_password
-      raise NotImplementedError
+      mysql_config[:password]
     end
 
     def mysql_host
-      raise NotImplementedError
+      mysql_config[:host]
     end
 
     def mysql_database
-      raise NotImplementedError
+      mysql_config[:database]
+    end
+    
+  private
+  
+    def mysql_config
+      mysql_connection.config
+    end
+    
+    def mysql_connection
+      @connection ||= begin
+        connection = ActiveRecord::Base.connection
+        # See https://rails.lighthouseapp.com/projects/8994/tickets/2464-patch-allow-mysqladapterconfig-accessible
+        class << connection
+          attr_reader :config
+        end
+        
+        connection
+      end
     end
   end
 end
