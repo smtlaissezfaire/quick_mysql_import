@@ -99,7 +99,7 @@ module QuickMysqlImport
       options = [
         "--no-data",
         "--single-transaction",
-        "-u #{mysql_user}",
+        "-u '#{mysql_user}'",
         "-h '#{mysql_host}'",
       ]
       
