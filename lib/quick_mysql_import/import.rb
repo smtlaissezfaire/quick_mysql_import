@@ -9,29 +9,31 @@ module QuickMysqlImport
     end
 
     def import
-      drop_database
       import_schema
       import_data
     end
 
-    def drop_database
-      mysql "DROP DATABASE #{database_name}"
-    end
-
     def import_schema
-      mysql "source #{schema_file}"
+      puts "* Importing schema"
+      options_string = build_options("-e 'source #{schema_file}'")
+      `mysql #{options_string}`
     end
 
     def import_data
       data_files.each do |file|
-        import = lambda { import_file(file) }
+        import = lambda do
+          puts "* Importing file #{file}"
+          import_file(file)
+        end
         
         use_threading? ? fork(&import) : import.call
       end
     end
 
     def import_file(file)
-      mysql "LOAD DATA IN FILE #{file} INTO TABLE #{tablize(file)}"
+      table_name = File.basename(file)
+      table_name = table_name.gsub!(".tab", "")
+      mysql "LOAD DATA LOCAL INFILE '#{file}' INTO TABLE #{table_name}"
     end
 
     def use_threading?
@@ -39,7 +41,7 @@ module QuickMysqlImport
     end
 
   private
-
+  
     def schema_file
       file_finder.schema_file
     end

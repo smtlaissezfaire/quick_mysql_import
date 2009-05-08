@@ -96,17 +96,7 @@ module QuickMysqlImport
     end
 
     def mysql_options
-      options = [
-        "--no-data",
-        "--single-transaction",
-        "-u '#{mysql_user}'",
-        "-h '#{mysql_host}'",
-      ]
-      
-      options << "-p '#{mysql_password}'" if mysql_password
-      options << "#{mysql_database}"
-      
-      options.join(" ")
+      build_options("--no-data", "--single-transaction")
     end
   end
 end

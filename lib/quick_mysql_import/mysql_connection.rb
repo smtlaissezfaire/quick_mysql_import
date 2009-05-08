@@ -33,6 +33,22 @@ module QuickMysqlImport
       tables.flatten
     end
     
+    def common_mysql_options
+      common_mysql_options = [
+        "-u '#{mysql_user}'",
+        "-h '#{mysql_host}'",
+      ]
+      common_mysql_options << "-p '#{mysql_password}'" if mysql_password
+      common_mysql_options << "#{mysql_database}"
+      common_mysql_options
+    end
+    
+    def build_options(*options)
+      my_options = options.dup
+      my_options.concat(common_mysql_options)
+      my_options.join(" ")
+    end
+    
   private
   
     def mysql_config
