@@ -11,7 +11,7 @@ module QuickMysqlImport
     end
 
     def mysql_user
-      mysql_config[:user]
+      mysql_config[:username]
     end
 
     def mysql_password
