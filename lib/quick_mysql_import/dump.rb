@@ -49,7 +49,7 @@ module QuickMysqlImport
     end
 
     def move_data
-      mkdir destination
+      directory destination
       mv base_tmp_path, destination
     end
 
