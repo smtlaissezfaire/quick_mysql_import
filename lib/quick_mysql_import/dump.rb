@@ -60,7 +60,7 @@ module QuickMysqlImport
     end
 
     def tar
-      sh "tar -c #{new_path} > #{new_path}.tar"
+      sh "tar -C #{destination} -c #{@time} > #{new_path}.tar"
     end
 
     def compress
