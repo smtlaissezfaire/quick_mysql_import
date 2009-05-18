@@ -36,7 +36,9 @@ module QuickMysqlImport
     
     def dump_data_from_table(table_name)
       action = lambda do |table_name, outfile|
-        mysql "SELECT * FROM `#{table_name}` INTO OUTFILE '#{outfile}'"
+        cmd = "SELECT * FROM `#{table_name}` INTO OUTFILE '#{outfile}'"
+        puts "mysql: '#{cmd}'"
+        mysql cmd
       end
       
       if use_threading?
