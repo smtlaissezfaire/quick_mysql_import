@@ -27,10 +27,13 @@ module QuickMysqlImport
     end
     
     def tables
-      result = mysql "SHOW TABLES"
+      result = mysql "SHOW FULL TABLES"
       result.extend Enumerable
       tables = result.to_a
-      tables.flatten
+      
+
+      tables.reject! { |t| t[1] == "VIEW" }
+      tables.map { |t| t.first }
     end
     
     def common_mysql_options

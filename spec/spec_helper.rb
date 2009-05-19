@@ -9,3 +9,8 @@ ActiveRecord::Base.establish_connection :adapter => 'mysql', :database  => 'quic
 
 require File.dirname(__FILE__) + "/../lib/quick_mysql_import"
 
+ActiveRecord::Schema.define do
+  create_table :view_testing, :force => true do |t|
+    t.timestamps
+  end
+end
